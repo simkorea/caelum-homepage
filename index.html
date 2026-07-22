@@ -458,13 +458,6 @@ body{max-width:480px;margin:0 auto;background:var(--ivory);
 .sheet h3{font-size:1.45rem}
 } /* ===== end MOBILE FRAME ===== */
 
-/* ============ DESKTOP (≥901px) ============ */
-@media (min-width:901px){
-  html{background:var(--ivory)}
-  .mslide img{height:clamp(440px,42vw,640px)!important}
-  .foot .top{gap:56px}
-}
-
 /* ===== JS 없이 동작 (앱 내장 미리보기·구형 환경 대응) ===== */
 .mtgl{position:absolute;width:0;height:0;opacity:0;pointer-events:none}
 a.burger,a.close,a.navbg,label.hero-cta,label.b1,label.x{cursor:pointer}
@@ -496,6 +489,20 @@ a.burger{text-decoration:none}
 /* 타입 카드 이미지: 대표 1장 표시 */
 .tcard .tg img{opacity:0}
 .tcard .tg img.on,.tcard .tg img:first-of-type{opacity:1}
+
+/* ============ DESKTOP (≥901px) ============ */
+/* ★ 이 블록은 반드시 스타일시트 맨 끝에 둘 것.
+   위의 폴백 규칙(.mslide img height:300px!important)을 덮어써야 하므로
+   순서가 앞으로 가면 다시 이미지가 잘립니다. */
+@media (min-width:901px){
+  html{background:var(--ivory)}
+  /* 갤러리 이미지 — 원본 비율 그대로 (잘림 없음) */
+  .gal .frame{align-items:flex-start}
+  .mslide img{height:auto!important}
+  /* 큰 화면에서 화살표도 약간 크게 */
+  .marr{width:52px;height:52px;font-size:1.5rem}
+  .foot .top{gap:56px}
+}
 
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
