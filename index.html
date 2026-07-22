@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CAELUM 밤섬 · 카일룸 밤섬</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Nanum+Myeongjo:wght@400;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+:root{
+  --ink:#231D17;          /* espresso text */
+  --ink-soft:#5A4F44;     /* body */
+  --sangji:#6B4A2C;       /* trust brown (SANGJI) */
+  --sangji-d:#4A3320;     /* deep brown */
+  --gold:#A8884E;         /* antique gold accent */
+  --gold-l:#C2A572;
+  --stone:#C7B8A1;        /* greige */
+  --ivory:#F4EFE7;        /* main bg */
+  --cream:#EAE2D5;        /* alt band */
+  --taupe:#B8AC99;        /* footer band */
+  --line:rgba(35,29,23,.14);
+  --line-l:rgba(255,255,255,.22);
+  --serif:'Nanum Myeongjo', serif;
+  --latin:'Cormorant Garamond', serif;
+  --sans:'Pretendard', sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);background:var(--ivory);color:var(--ink);
+  font-size:16px;line-height:1.7;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+img{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+::selection{background:var(--gold);color:#fff}
+
+/* ---------- type helpers ---------- */
+.latin{font-family:var(--latin);letter-spacing:.34em;text-transform:uppercase;font-weight:500}
+.serif{font-family:var(--serif)}
+.eyebrow{font-family:var(--latin);text-transform:uppercase;letter-spacing:.4em;
+  font-size:.72rem;color:var(--gold);font-weight:600;display:flex;align-items:center;gap:.9em}
+.eyebrow::before{content:"";width:34px;height:1px;background:var(--gold);display:inline-block;opacity:.8}
+.sec-title{font-family:var(--serif);font-weight:700;line-height:1.32;
+  font-size:clamp(1.7rem,3.6vw,2.9rem);letter-spacing:-.01em;color:var(--ink)}
+.lede{font-size:1.02rem;color:var(--ink-soft);line-height:1.95;font-weight:300}
+
+/* ---------- layout ---------- */
+.wrap{max-width:1240px;margin:0 auto;padding:0 clamp(22px,5vw,60px)}
+.sec{padding:clamp(86px,11vw,150px) 0}
+.band-cream{background:var(--cream)}
+.band-ink{background:var(--ink);color:#EDE6DA}
+.reveal{opacity:0;transform:translateY(26px);transition:opacity 1.1s cubic-bezier(.2,.7,.2,1),transform 1.1s cubic-bezier(.2,.7,.2,1)}
+.reveal.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.reveal{opacity:1!important;transform:none!important;transition:none}}
+
+/* ---------- header ---------- */
+.hdr{position:fixed;top:0;left:0;right:0;z-index:60;display:flex;align-items:center;
+  justify-content:space-between;padding:22px clamp(22px,5vw,52px);
+  transition:background .5s,padding .5s,box-shadow .5s}
+.hdr.solid{background:rgba(244,239,231,.94);backdrop-filter:blur(10px);
+  box-shadow:0 1px 0 var(--line);padding-top:15px;padding-bottom:15px}
+.hdr .burger{display:flex;flex-direction:column;gap:5px;cursor:pointer;background:none;border:0;padding:6px}
+.hdr .burger span{width:26px;height:1.5px;background:#fff;transition:.4s}
+.hdr.solid .burger span{background:var(--ink)}
+.brand{font-family:var(--serif);font-weight:800;letter-spacing:.42em;font-size:1.18rem;
+  color:#fff;transition:color .5s;padding-left:.42em}
+.brand small{display:block;font-family:var(--latin);font-weight:500;letter-spacing:.46em;
+  font-size:.5rem;text-align:center;opacity:.85;margin-top:3px;padding-left:.46em}
+.hdr.solid .brand{color:var(--ink)}
+.hdr-r{display:flex;align-items:center;gap:22px}
+.tel{font-family:var(--latin);letter-spacing:.16em;font-size:.92rem;color:#fff;
+  transition:color .5s;font-weight:500}
+.hdr.solid .tel{color:var(--sangji)}
+.btn-reg{font-size:.82rem;letter-spacing:.12em;padding:11px 22px;border-radius:40px;
+  border:1px solid rgba(255,255,255,.6);color:#fff;background:transparent;cursor:pointer;
+  font-family:var(--sans);transition:.4s;white-space:nowrap}
+.btn-reg:hover{background:#fff;color:var(--ink);border-color:#fff}
+.hdr.solid .btn-reg{border-color:var(--sangji);color:var(--sangji)}
+.hdr.solid .btn-reg:hover{background:var(--sangji);color:#fff}
+@media(max-width:760px){.tel{display:none}.brand{font-size:1rem}}
+
+/* ---------- nav overlay ---------- */
+.nav-ov{position:fixed;inset:0;z-index:80;background:var(--sangji-d);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  opacity:0;visibility:hidden;transition:opacity .6s,visibility .6s}
+.nav-ov.open{opacity:1;visibility:visible}
+.nav-ov .close{position:absolute;top:26px;left:clamp(22px,5vw,52px);background:none;border:0;
+  cursor:pointer;width:30px;height:30px}
+.nav-ov .close::before,.nav-ov .close::after{content:"";position:absolute;top:14px;left:2px;
+  width:26px;height:1.5px;background:#E7DCC9}
+.nav-ov .close::before{transform:rotate(45deg)}.nav-ov .close::after{transform:rotate(-45deg)}
+.nav-ov .em{margin-bottom:42px}
+.nav-list{list-style:none;text-align:center}
+.nav-list li{overflow:hidden}
+.nav-list a{font-family:var(--serif);font-weight:400;color:#E7DCC9;
+  font-size:clamp(1.4rem,3.4vw,2.1rem);line-height:2.05;letter-spacing:.04em;
+  display:inline-block;transition:color .35s,letter-spacing .35s;position:relative}
+.nav-list a:hover{color:#fff;letter-spacing:.12em}
+.nav-list .lt{display:block;font-family:var(--latin);font-size:.6rem;letter-spacing:.4em;
+  color:var(--gold-l);margin-bottom:-6px;text-transform:uppercase}
+.nav-foot{position:absolute;bottom:34px;left:0;right:0;display:flex;justify-content:center;gap:26px;
+  color:var(--gold-l);font-family:var(--latin);letter-spacing:.2em;font-size:.85rem}
+
+/* ---------- hero ---------- */
+.hero{position:relative;height:100svh;min-height:620px;display:flex;align-items:center;
+  justify-content:center;text-align:center;color:#fff;overflow:hidden}
+.hero-bg{position:absolute;inset:0}
+.hero-bg .slide{position:absolute;inset:0;background-size:cover;background-position:center;
+  opacity:0;transition:opacity 2s ease;transform:scale(1.06);animation:kb 16s ease-in-out infinite alternate}
+.hero-bg .slide.on{opacity:1}
+.hero-vid{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0}
+.view-video{margin-top:26px;border-radius:4px;overflow:hidden;position:relative;
+  box-shadow:0 24px 60px rgba(0,0,0,.45)}
+.view-video video{display:block;width:100%;height:auto}
+.view-video .vv-cap{position:absolute;left:0;right:0;bottom:0;padding:46px 30px 20px;
+  font-family:var(--sans);font-size:.86rem;font-weight:300;color:rgba(255,255,255,.9);
+  background:linear-gradient(transparent,rgba(0,0,0,.6));letter-spacing:.01em}
+.view-video .vv-cap span{font-family:var(--latin);letter-spacing:.16em;text-transform:uppercase;
+  color:var(--gold);font-size:.74rem;margin-right:12px}
+@media(max-width:640px){.view-video .vv-cap{font-size:.78rem;padding:38px 18px 16px}}
+@keyframes kb{from{transform:scale(1.02)}to{transform:scale(1.12)}}
+.hero::after{content:"";position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(20,15,10,.46) 0%,rgba(20,15,10,.24) 42%,rgba(20,15,10,.5) 100%);z-index:1}
+.hero-in{position:relative;z-index:2;padding:0 24px;max-width:960px}
+.hero-key{font-family:var(--latin);text-transform:uppercase;letter-spacing:.5em;
+  font-size:clamp(.62rem,1.4vw,.84rem);font-weight:500;opacity:.92;margin-bottom:30px}
+.hero-h1{font-family:var(--serif);font-weight:800;line-height:1.28;
+  font-size:clamp(2.3rem,6.4vw,4.6rem);letter-spacing:-.01em;
+  text-shadow:0 2px 40px rgba(0,0,0,.35)}
+.hero-h1 em{font-style:normal;color:#EBCB7E;
+  text-shadow:0 0 1px rgba(0,0,0,.9),0 1px 3px rgba(0,0,0,.72),0 0 20px rgba(0,0,0,.55)}
+.hero-sub{margin-top:26px;font-weight:300;font-size:clamp(.92rem,1.9vw,1.12rem);
+  line-height:1.85;opacity:.94;letter-spacing:.01em}
+.hero-cta{margin-top:42px;display:inline-flex;align-items:center;gap:12px;
+  font-size:.92rem;letter-spacing:.14em;padding:16px 38px;border-radius:44px;
+  background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.7);color:#fff;
+  cursor:pointer;font-family:var(--sans);backdrop-filter:blur(3px);transition:.45s}
+.hero-cta:hover{background:#fff;color:var(--ink);border-color:#fff;letter-spacing:.18em}
+.scroll-cue{position:absolute;bottom:30px;left:50%;transform:translateX(-50%);z-index:2;
+  width:1px;height:54px;background:linear-gradient(#fff,transparent);overflow:hidden}
+.scroll-cue::after{content:"";position:absolute;top:-54px;left:0;width:1px;height:54px;
+  background:#fff;animation:drop 2.4s cubic-bezier(.7,0,.3,1) infinite}
+@keyframes drop{0%{top:-54px}60%,100%{top:54px}}
+
+/* ---------- editorial narrative ---------- */
+.narr{max-width:760px;margin:0 auto;text-align:center}
+.narr .sec-title{margin:22px auto 34px}
+.narr p{font-weight:300;color:var(--ink-soft);font-size:1.06rem;line-height:2.05;
+  margin-bottom:1.7em;text-wrap:balance}
+.narr p strong{color:var(--ink);font-weight:700}
+.pull{font-family:var(--serif);font-weight:700;color:var(--sangji);
+  font-size:clamp(1.5rem,3.4vw,2.3rem);letter-spacing:.02em;margin-top:14px}
+.eyebrow.ctr{justify-content:center}
+.figband{margin-top:62px;border-radius:2px;overflow:hidden;position:relative;
+  box-shadow:0 30px 70px -40px rgba(40,28,16,.5)}
+.figband img{width:100%;height:clamp(280px,42vw,560px);object-fit:cover}
+.figcap{position:absolute;bottom:18px;left:24px;color:#fff;font-family:var(--latin);
+  letter-spacing:.32em;font-size:.66rem;text-transform:uppercase;text-shadow:0 1px 8px rgba(0,0,0,.5)}
+
+/* ---------- split (new equation) ---------- */
+.split{display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:clamp(34px,5vw,80px)}
+.split.rev .split-img{order:2}
+.split-img{position:relative;border-radius:2px;overflow:hidden;
+  box-shadow:0 36px 80px -46px rgba(40,28,16,.55)}
+.split-img img{width:100%;height:clamp(360px,46vw,620px);object-fit:cover}
+.split-txt .sec-title{margin:20px 0 26px}
+@media(max-width:860px){.split{grid-template-columns:1fr}.split.rev .split-img{order:0}}
+
+/* ---------- overview / stats ---------- */
+.ov-head{text-align:center;max-width:680px;margin:0 auto 60px}
+.ov-head .eyebrow{justify-content:center}
+.ov-head .sec-title{margin:20px 0 18px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);
+  border:1px solid var(--line);margin-bottom:54px}
+.stat{background:var(--cream);padding:34px 26px;text-align:center}
+.stat .k{font-family:var(--latin);letter-spacing:.28em;text-transform:uppercase;
+  font-size:.66rem;color:var(--gold);margin-bottom:14px}
+.stat .v{font-family:var(--serif);font-weight:700;font-size:clamp(1.3rem,2.4vw,1.78rem);
+  color:var(--ink);line-height:1.3}
+.stat .v small{display:block;margin-top:7px;font-size:.74em;font-weight:400;
+  color:var(--ink-soft);letter-spacing:.02em;font-family:var(--sans)}
+@media(max-width:760px){.stats{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:430px){.stats{grid-template-columns:1fr}}
+
+/* ---------- gallery (cycling) ---------- */
+.gal{position:relative;border-radius:2px;overflow:hidden;background:#0c0907;
+  box-shadow:0 40px 90px -50px rgba(40,28,16,.55)}
+.gal .frame{position:relative;height:clamp(320px,52vw,640px)}
+.gal .frame img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+  opacity:0;transition:opacity 1.4s ease}
+.gal .frame img.on{opacity:1}
+.gal .cap{position:absolute;left:26px;bottom:22px;z-index:3;color:#fff}
+.gal .cap .n{font-family:var(--latin);letter-spacing:.3em;font-size:.62rem;
+  text-transform:uppercase;color:var(--gold-l)}
+.gal .cap .t{font-family:var(--serif);font-size:1.15rem;font-weight:400;
+  text-shadow:0 1px 10px rgba(0,0,0,.5)}
+.gal .grad{position:absolute;inset:0;z-index:2;
+  background:linear-gradient(0deg,rgba(0,0,0,.5),transparent 42%)}
+.gal .nav{position:absolute;top:50%;transform:translateY(-50%);z-index:4;
+  width:46px;height:46px;border-radius:50%;border:1px solid rgba(255,255,255,.55);
+  background:rgba(0,0,0,.18);color:#fff;cursor:pointer;font-size:1.1rem;
+  display:flex;align-items:center;justify-content:center;transition:.35s;backdrop-filter:blur(3px)}
+.gal .nav:hover{background:#fff;color:var(--ink);border-color:#fff}
+.gal .nav.prev{left:18px}.gal .nav.next{right:18px}
+.gal .dots{position:absolute;right:24px;bottom:26px;z-index:4;display:flex;gap:8px}
+.gal .dots i{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.4);
+  cursor:pointer;transition:.3s}
+.gal .dots i.on{background:#fff;width:22px;border-radius:4px}
+
+/* ---------- residence types ---------- */
+.types{display:grid;grid-template-columns:1fr 1fr;gap:clamp(26px,3vw,42px);margin-top:56px}
+.tcard{background:var(--ivory);border:1px solid var(--line);border-radius:2px;overflow:hidden}
+.tcard .tg{position:relative;height:300px;background:#0c0907}
+.tcard .tg img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+  opacity:0;transition:opacity 1.3s ease}
+.tcard .tg img.on{opacity:1}
+.tcard .tg .badge{position:absolute;top:18px;left:18px;z-index:2;background:rgba(107,74,44,.92);
+  color:#fff;font-family:var(--serif);font-weight:700;font-size:1.05rem;letter-spacing:.1em;
+  padding:8px 18px;border-radius:2px}
+.tcard .tbody{padding:30px clamp(22px,2.4vw,34px) 34px}
+.tcard h3{font-family:var(--serif);font-weight:700;font-size:1.4rem;margin-bottom:4px}
+.tcard .floors{font-size:.82rem;color:var(--gold);letter-spacing:.12em;margin-bottom:22px;
+  font-family:var(--latin);text-transform:uppercase}
+.spec{list-style:none;border-top:1px solid var(--line)}
+.spec li{display:flex;justify-content:space-between;padding:13px 0;
+  border-bottom:1px solid var(--line);font-size:.95rem}
+.spec li span:first-child{color:var(--ink-soft)}
+.spec li span:last-child{font-family:var(--serif);font-weight:700;color:var(--ink)}
+.spec li.hi span:last-child{color:var(--sangji)}
+.tnote{text-align:center;margin-top:34px;font-size:.92rem;color:var(--ink-soft);font-weight:300}
+@media(max-width:760px){.types{grid-template-columns:1fr}}
+
+/* ---------- view section (dark) ---------- */
+.view-head{text-align:center;max-width:680px;margin:0 auto 54px}
+.view-head .eyebrow{justify-content:center;color:var(--gold-l)}
+.view-head .eyebrow::before{background:var(--gold-l)}
+.view-head .sec-title{color:#F1EADD;margin:20px 0 16px}
+.view-head .lede{color:#C9BDAB}
+.band-ink .gal{box-shadow:0 40px 90px -50px rgba(0,0,0,.7)}
+
+/* ---------- builder / sangji ---------- */
+.sangji{display:grid;grid-template-columns:.9fr 1.1fr;gap:clamp(34px,5vw,76px);align-items:center}
+.sangji-logo{margin-bottom:30px}
+.sangji .sec-title{margin:18px 0 26px}
+.heri{display:flex;gap:30px;margin-top:34px;flex-wrap:wrap}
+.heri .h{flex:1;min-width:120px}
+.heri .h .n{font-family:var(--latin);letter-spacing:.2em;font-size:1.4rem;color:var(--sangji);
+  font-weight:600}
+.heri .h .d{font-size:.82rem;color:var(--ink-soft);margin-top:4px}
+.roles{display:flex;gap:40px;margin-top:38px;border-top:1px solid var(--line);padding-top:26px;flex-wrap:wrap}
+.roles .r .k{font-family:var(--latin);letter-spacing:.26em;text-transform:uppercase;
+  font-size:.64rem;color:var(--gold);margin-bottom:6px}
+.roles .r .v{font-family:var(--serif);font-weight:700;font-size:1.02rem;line-height:1.5}
+.sangji-img{border-radius:2px;overflow:hidden;box-shadow:0 36px 80px -46px rgba(40,28,16,.5)}
+.sangji-img img{width:100%;height:clamp(380px,48vw,560px);object-fit:cover}
+@media(max-width:860px){.sangji{grid-template-columns:1fr}.sangji-img{order:-1}}
+
+/* ---------- location / maps ---------- */
+.loc-head{text-align:center;max-width:640px;margin:0 auto 56px}
+.loc-head .eyebrow{justify-content:center}.loc-head .sec-title{margin:20px 0}
+.maps{display:grid;grid-template-columns:1fr 1fr;gap:clamp(28px,4vw,56px)}
+.mcard{text-align:center}
+.mcard .mbox{background:var(--cream);border:1px solid var(--line);border-radius:2px;
+  padding:30px;aspect-ratio:4/3;display:flex;align-items:center;justify-content:center}
+.mcard svg{width:100%;height:100%}
+.mcard h4{font-family:var(--latin);letter-spacing:.2em;font-size:1rem;margin:26px 0 8px;
+  text-transform:uppercase;color:var(--ink)}
+.mcard .addr{font-family:var(--serif);font-weight:700;color:var(--sangji);font-size:1.08rem}
+.mcard .sub{font-size:.86rem;color:var(--ink-soft);margin-top:4px}
+@media(max-width:760px){.maps{grid-template-columns:1fr}}
+
+/* ---------- closing CTA ---------- */
+.cta-band{position:relative;text-align:center;color:#fff;overflow:hidden;
+  padding:clamp(90px,12vw,150px) 0}
+.cta-band .bg{position:absolute;inset:0;background-size:cover;background-position:center 60%}
+.cta-band::after{content:"";position:absolute;inset:0;background:rgba(28,20,12,.6)}
+.cta-band .in{position:relative;z-index:2;max-width:720px;margin:0 auto;padding:0 24px}
+.cta-band .q{font-family:var(--serif);font-weight:700;font-size:clamp(1.8rem,4.4vw,3rem);
+  line-height:1.4;margin-bottom:18px}
+.cta-band .qs{font-weight:300;opacity:.92;font-size:1.05rem;line-height:1.9;margin-bottom:38px}
+.cta-band .row{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+.cta-band .b1{background:#fff;color:var(--ink);padding:16px 40px;border-radius:44px;
+  font-size:.95rem;letter-spacing:.12em;border:0;cursor:pointer;font-family:var(--sans);transition:.4s}
+.cta-band .b1:hover{background:var(--gold);color:#fff}
+.cta-band .b2{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.7);
+  padding:16px 36px;border-radius:44px;font-size:.95rem;letter-spacing:.1em;
+  font-family:var(--latin);font-weight:500}
+
+/* ---------- footer ---------- */
+.foot{background:var(--taupe);color:#34291C;padding:64px 0 40px}
+.foot .top{display:flex;justify-content:space-between;align-items:flex-start;gap:40px;flex-wrap:wrap;
+  padding-bottom:34px;border-bottom:1px solid rgba(52,41,28,.25)}
+.foot .fbrand .em{margin-bottom:12px}
+.foot .fbrand .nm{font-family:var(--serif);font-weight:800;letter-spacing:.4em;font-size:1.2rem;padding-left:.4em}
+.foot .fbrand .nm small{display:block;font-family:var(--latin);letter-spacing:.4em;font-size:.5rem;
+  text-align:center;margin-top:3px;opacity:.7}
+.foot .fcol{font-size:.9rem;line-height:1.95}
+.foot .fcol .lab{font-family:var(--latin);letter-spacing:.2em;text-transform:uppercase;
+  font-size:.62rem;color:var(--sangji-d);opacity:.8;margin-bottom:6px}
+.foot .ftel{font-family:var(--latin);font-size:1.7rem;letter-spacing:.08em;color:var(--sangji-d);font-weight:600}
+.foot .roles2{display:flex;gap:36px;flex-wrap:wrap;margin-top:6px}
+.foot .disc{font-size:.74rem;color:#5A4B38;line-height:1.85;margin-top:26px;opacity:.85}
+.foot .sig{font-family:var(--serif);font-weight:700;font-size:1.05rem;color:var(--sangji-d);margin-top:24px}
+.foot .copy{font-family:var(--latin);letter-spacing:.18em;font-size:.62rem;
+  text-transform:uppercase;margin-top:18px;opacity:.6}
+
+/* ---------- modal form ---------- */
+.modal{position:fixed;inset:0;z-index:100;display:none;align-items:flex-start;justify-content:center;
+  padding:40px 18px;overflow:auto;background:rgba(20,14,9,.62);backdrop-filter:blur(6px)}
+.modal.open{display:flex}
+.sheet{background:var(--ivory);max-width:680px;width:100%;border-radius:3px;padding:clamp(30px,5vw,52px);
+  position:relative;box-shadow:0 50px 120px -40px rgba(0,0,0,.6);margin:auto}
+.sheet .x{position:absolute;top:20px;right:22px;background:none;border:0;cursor:pointer;
+  font-size:1.5rem;color:var(--ink-soft);line-height:1}
+.sheet .mh{text-align:center;margin-bottom:34px}
+.sheet .eyebrow{justify-content:center;margin-bottom:14px}
+.sheet h3{font-family:var(--serif);font-weight:700;font-size:1.7rem}
+.sheet .ms{color:var(--ink-soft);font-size:.92rem;margin-top:10px;font-weight:300}
+.field{margin-bottom:22px}
+.field>label{display:block;font-size:.82rem;font-weight:600;color:var(--ink);margin-bottom:9px;letter-spacing:.02em}
+.field>label .req{color:var(--gold);margin-left:3px}
+.field input,.field select{width:100%;padding:13px 15px;border:1px solid var(--line);
+  background:#fff;border-radius:2px;font-family:var(--sans);font-size:.95rem;color:var(--ink)}
+.field input:focus,.field select:focus{outline:2px solid var(--gold);outline-offset:-1px;border-color:var(--gold)}
+.f3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.f2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media(max-width:520px){.f3{grid-template-columns:1fr}.f2{grid-template-columns:1fr}}
+.radios{display:flex;gap:10px;flex-wrap:wrap}
+.radios label{flex:1;min-width:64px;text-align:center;border:1px solid var(--line);background:#fff;
+  border-radius:2px;padding:11px 8px;font-size:.9rem;cursor:pointer;transition:.25s;color:var(--ink-soft)}
+.radios input{display:none}
+.radios input:checked+span{color:var(--sangji);font-weight:700}
+.radios label:has(input:checked){border-color:var(--sangji);background:#F6F0E7}
+.agree{background:var(--cream);border:1px solid var(--line);border-radius:2px;padding:18px 20px;margin-bottom:16px}
+.agree .at{font-weight:700;font-size:.88rem;margin-bottom:10px}
+.agree .ad{font-size:.78rem;color:var(--ink-soft);line-height:1.7;margin-bottom:12px}
+.agree .ar{display:flex;gap:22px;font-size:.88rem}
+.agree .ar label{cursor:pointer;display:flex;align-items:center;gap:7px}
+.submit{width:100%;background:var(--sangji);color:#fff;border:0;padding:17px;border-radius:2px;
+  font-size:1rem;letter-spacing:.14em;cursor:pointer;font-family:var(--sans);transition:.35s;margin-top:8px}
+.submit:hover{background:var(--sangji-d)}
+.done{text-align:center;padding:30px 10px;display:none}
+.done.show{display:block}
+.done .ic{width:64px;height:64px;border-radius:50%;border:1.5px solid var(--gold);margin:0 auto 22px;
+  display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:1.7rem}
+.done h3{font-family:var(--serif);font-weight:700;font-size:1.5rem;margin-bottom:12px}
+.done p{color:var(--ink-soft);font-size:.95rem;line-height:1.8}
+.done .tel2{font-family:var(--latin);font-size:1.5rem;color:var(--sangji);letter-spacing:.08em;margin-top:14px;font-weight:600}
+.note-demo{font-size:.72rem;color:var(--ink-soft);text-align:center;margin-top:14px;opacity:.7}
+.timegrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.timegrid button{border:1px solid var(--line);background:#fff;border-radius:2px;padding:11px 4px;
+  font-family:var(--sans);font-size:.86rem;color:var(--ink-soft);cursor:pointer;transition:.2s}
+.timegrid button:hover{border-color:var(--gold)}
+.timegrid button.on{border-color:var(--sangji);background:#F6F0E7;color:var(--sangji);font-weight:700}
+.formerr{color:#B4451F;font-size:.83rem;text-align:center;margin-top:12px;min-height:1.1em;line-height:1.5}
+
+/* ============ MOBILE FRAME (≤900px 전용) ============ */
+/* 좀은 화면은 폰 목업 프레임으로 고정 · 데스크톱(≥901px)은 하단 DESKTOP 블록 담당 */
+@media (max-width:900px){
+html{background:#15100c}
+body{max-width:480px;margin:0 auto;background:var(--ivory);
+  box-shadow:0 0 60px rgba(0,0,0,.45)}
+.hdr{max-width:480px;margin:0 auto}
+.nav-ov,.modal{max-width:480px;margin:0 auto}
+
+/* 헤더 — 대표번호를 우측 상단에 항상 한 줄로 표시 (뷰포트 무관) */
+.hdr{padding:15px 18px!important}
+.brand{font-size:.95rem!important;letter-spacing:.2em!important;padding-left:.2em}
+.brand small{letter-spacing:.3em!important;font-size:.42rem!important}
+.hdr-r{gap:11px!important;flex-wrap:nowrap!important;align-items:center}
+.tel{display:inline-flex!important;font-size:.82rem!important;letter-spacing:.06em!important;white-space:nowrap}
+.btn-reg{display:none!important}
+
+/* 본문 가시성 보장 — 폰에서 스크롤 감지가 실패해도 항상 보이도록 */
+.reveal{opacity:1!important;transform:none!important;transition:none!important}
+
+/* 히어로 — 첫 화면을 꽉 채움 (한 화면에 다 보임) */
+.hero{height:100svh;min-height:560px}
+.hero-in{padding:0 22px;max-width:100%}
+.hero-key{font-size:.64rem!important;letter-spacing:.34em!important;margin-bottom:20px}
+.hero-h1{font-size:2.05rem!important;line-height:1.36!important}
+.hero-sub{font-size:.95rem!important;margin-top:18px;line-height:1.8}
+.hero-cta{margin-top:30px;padding:14px 30px;font-size:.88rem}
+.scroll-cue{height:42px;bottom:24px}
+
+/* 섹션 공통 — 여백/제목 압축 */
+.sec{padding:52px 0!important}
+.wrap{padding:0 20px!important}
+.sec-title{font-size:1.6rem!important}
+.lede{font-size:.96rem!important;line-height:1.82}
+.eyebrow{font-size:.66rem}
+
+/* 01 희소성 */
+.narr{max-width:100%}
+.narr .sec-title{margin:16px auto 22px}
+.narr p{font-size:.99rem!important;line-height:1.92;margin-bottom:1.35em}
+.pull{font-size:1.45rem!important}
+.figband{margin-top:38px}
+.figband img{height:230px!important}
+
+/* 02 새 공식 (split) */
+.split{gap:26px}
+.split-img img{height:280px!important}
+.split-txt .sec-title{margin:12px 0 16px}
+
+/* 03 개요 + 스탯 — 2열로 압축해 한 화면 가깝게 */
+.ov-head{margin:0 auto 34px}
+.stats{grid-template-columns:1fr 1fr!important;margin-bottom:36px}
+.stat{padding:20px 12px}
+.stat .k{margin-bottom:9px;font-size:.6rem}
+.stat .v{font-size:1.16rem!important}
+.stat .v small{font-size:.72em}
+
+/* 갤러리 */
+.gal .frame{height:290px!important}
+.gal .cap{left:18px;bottom:18px}
+.gal .cap .t{font-size:1.02rem}
+.gal .nav{width:38px;height:38px;font-size:1rem}
+.gal .nav.prev{left:12px}.gal .nav.next{right:12px}
+.gal .dots{right:16px;bottom:18px}
+
+/* 04 레지던스 타입 */
+.types{gap:22px;margin-top:38px}
+.tcard .tg{height:230px}
+.tcard .tbody{padding:24px 20px 28px}
+.tcard h3{font-size:1.28rem}
+.spec li{font-size:.92rem;padding:11px 0}
+.tnote{margin-top:24px;font-size:.9rem}
+
+/* 05 뷰 */
+.view-head{margin:0 auto 34px}
+.view-video{margin-top:18px}
+
+/* 상지건설 */
+.sangji{gap:28px}
+.sangji-img img{height:280px!important}
+.heri{gap:18px;margin-top:24px}
+.heri .h .n{font-size:1.25rem}
+.roles{gap:26px;margin-top:26px;padding-top:20px}
+
+/* 오시는 길 */
+.loc-head{margin:0 auto 34px}
+.maps{gap:24px}
+
+/* 클로징 CTA */
+.cta-band{padding:70px 0!important}
+.cta-band .q{font-size:1.68rem!important}
+.cta-band .qs{font-size:.96rem;margin-bottom:30px}
+.cta-band .b1,.cta-band .b2{padding:14px 30px;font-size:.9rem}
+
+/* 푸터 */
+.foot{padding:46px 0 32px}
+.foot .top{gap:28px}
+.foot .ftel{font-size:1.45rem}
+
+/* 모달 폼 */
+.sheet{padding:30px 22px}
+.sheet h3{font-size:1.45rem}
+} /* ===== end MOBILE FRAME ===== */
+
+/* ============ DESKTOP (≥901px) ============ */
+@media (min-width:901px){
+  html{background:var(--ivory)}
+  .mslide img{height:clamp(440px,42vw,640px)!important}
+  .foot .top{gap:56px}
+}
+
+/* ===== JS 없이 동작 (앱 내장 미리보기·구형 환경 대응) ===== */
+.mtgl{position:absolute;width:0;height:0;opacity:0;pointer-events:none}
+a.burger,a.close,a.navbg,label.hero-cta,label.b1,label.x{cursor:pointer}
+a.burger{text-decoration:none}
+/* 메뉴: URL 해시(:target)로 열고 닫기 — 항목을 누르면 이동하며 자동으로 닫힘 */
+.nav-ov{opacity:0!important;visibility:hidden!important;transition:opacity .4s,visibility .4s}
+.nav-ov:target{opacity:1!important;visibility:visible!important}
+.nav-ov .navbg{position:absolute;inset:0;z-index:0;display:block}
+.nav-ov .close,.nav-ov .em,.nav-ov .nav-list,.nav-ov .nav-foot{position:relative;z-index:1}
+/* 관심고객 등록: 체크박스로 열고 닫기 */
+.modal{display:none!important}
+#m-reg:checked ~ .modal{display:flex!important}
+/* 갤러리: 한 화면에 한 장, 양 끝 좌우 화살표로 넘김 (JS 불필요·미리보기 동작) */
+.gal{overflow:hidden!important;position:relative}
+.gal .frame{position:static!important;height:auto!important;display:flex!important;
+  overflow-x:auto!important;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;
+  scroll-behavior:smooth;scrollbar-width:none}
+.gal .frame::-webkit-scrollbar{display:none}
+.mslide{position:relative;flex:0 0 100%;scroll-snap-align:center;scroll-snap-stop:always}
+.mslide img{position:relative!important;inset:auto!important;opacity:1!important;
+  width:100%!important;height:300px!important;object-fit:cover;display:block}
+.marr{position:absolute;top:50%;transform:translateY(-50%);z-index:6;
+  width:42px;height:42px;border-radius:50%;border:1px solid rgba(255,255,255,.6);
+  background:rgba(0,0,0,.22);color:#fff;display:flex;align-items:center;justify-content:center;
+  font-size:1.25rem;line-height:1;text-decoration:none;-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px)}
+.marr.l{left:14px}.marr.r{right:14px}
+.gal .nav,.gal .dots,.gal .cap,.gal .grad{display:none!important}
+.gal::after{content:none!important}
+/* 타입 카드 이미지: 대표 1장 표시 */
+.tcard .tg img{opacity:0}
+.tcard .tg img.on,.tcard .tg img:first-of-type{opacity:1}
+
+</style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<noscript><style>.reveal{opacity:1!important;transform:none!important}</style></noscript>
+</head>
+<body>
+<input type="checkbox" id="m-reg" class="mtgl">
+
+<!-- HEADER -->
+<header class="hdr" id="hdr">
+  <a class="burger" href="#navov" aria-label="메뉴 열기"><span></span><span></span><span></span></a>
+  <div class="brand">CAELUM<small>BAMSEOM</small></div>
+  <div class="hdr-r">
+    <a class="tel" href="tel:15551087">1555 · 1087</a>
+    <label class="btn-reg" for="m-reg">관심고객 등록</label>
+  </div>
+</header>
+
+<!-- NAV OVERLAY -->
+<div class="nav-ov" id="navov">
+  <a class="navbg" href="#_"></a><a class="close" href="#_" aria-label="메뉴 닫기"></a>
+  <div class="em"><svg width="60" height="44" viewBox="0 0 60 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M8 16 L30 5 L52 16 Z" fill="#C2A572"/>
+<rect x="13" y="18" width="5" height="20" fill="#C2A572"/>
+<rect x="22" y="18" width="5" height="20" fill="#C2A572"/>
+<rect x="33" y="18" width="5" height="20" fill="#C2A572"/>
+<rect x="42" y="18" width="5" height="20" fill="#C2A572"/>
+<rect x="8" y="40" width="44" height="3" fill="#C2A572"/></svg></div>
+  <ul class="nav-list">
+    <li><a href="#hero" data-nav><span class="lt">The Riverfront</span>한강</a></li>
+    <li><a href="#scarcity" data-nav><span class="lt">What Cannot Be Remade</span>희소성</a></li>
+    <li><a href="#overview" data-nav><span class="lt">Only 28 Residences</span>단지 개요</a></li>
+    <li><a href="#residence" data-nav><span class="lt">A &amp; B Residence</span>레지던스</a></li>
+    <li><a href="#view" data-nav><span class="lt">The Last Riverfront</span>한강 뷰</a></li>
+    <li><a href="#builder" data-nav><span class="lt">Since 2002 · Caelum</span>시공 · 시행</a></li>
+    <li><a href="#location" data-nav><span class="lt">Location</span>오시는 길</a></li>
+  </ul>
+  <div class="nav-foot"><span>1555 · 1087</span><span>·</span><span>CAELUM BAMSEOM</span></div>
+</div>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <div class="hero-bg" id="herobg">
+    <div class="slide on" style="background-image:url('./images/caelum/hero-bg.jpg')"></div>
+    <video class="hero-vid" autoplay muted loop playsinline preload="auto" poster="./images/caelum/hero-poster.jpg">
+      <source src="./images/caelum/hero-loop.mp4" type="video/mp4">
+    </video>
+  </div>
+  <div class="hero-in">
+    <div class="hero-key">Create the Riverfront of Seoul</div>
+    <h1 class="hero-h1"><em>한강</em>은,<br>늘어나지 않습니다</h1>
+    <p class="hero-sub">아파트는 또 지어집니다.<br>그러나 한강을 마주한 자리는, 다시 만들 수 없습니다.</p>
+    <label class="hero-cta" for="m-reg">관심고객 등록 <span style="font-family:var(--latin);letter-spacing:.1em">&rarr;</span></label>
+  </div>
+  <div class="scroll-cue"></div>
+</section>
+
+<!-- 01 SCARCITY -->
+<section class="sec band-cream" id="scarcity">
+  <div class="wrap">
+    <div class="narr reveal">
+      <div class="eyebrow ctr">What Cannot Be Remade</div>
+      <h2 class="sec-title">흔한 것이 아니라,<br>다시 만들 수 있는가</h2>
+      <p>올해도 서울엔 새 아파트가 지어졌습니다.<br>
+         내년에도, 그 다음에도 또 지어질 겁니다.<br>
+         그런데 한강은 — 단 1미터도 늘지 않았습니다.</p>
+      <p>흔들어도 제자리를 찾는 자리가 있고,<br>
+         한 번 빠지면 돌아오지 못하는 자리가 있습니다.<br>
+         그 차이는 '얼마나 흔한가'가 아니라<br>
+         <strong>'다시 만들 수 있는가'</strong>에서 갈립니다.</p>
+      <p>아파트는 또 짓습니다. 얼마든지요.<br>
+         하지만 한강을 마주한 자리는, 더 못 만듭니다.<br>
+         그래서 앞으로는, <strong>못 만드는 것을 가진 사람</strong>이 가집니다.</p>
+      <div class="pull">집은 결국, 안목입니다.</div>
+    </div>
+    <div class="figband reveal">
+      <img src="./images/caelum/figband.jpg" alt="한강 노을 전경">
+      <div class="figcap">The Han River · Mapo</div>
+    </div>
+  </div>
+</section>
+
+<!-- 02 NEW EQUATION -->
+<section class="sec" id="equation">
+  <div class="wrap">
+    <div class="split reveal">
+      <div class="split-img"><img src="./images/caelum/equation.jpg" alt="카일룸 밤섬 한강 조망"></div>
+      <div class="split-txt">
+        <div class="eyebrow">The New Equation</div>
+        <h2 class="sec-title">한강을 품되,<br>부담은 덜어내다</h2>
+        <p class="lede">한강 변의 집은 늘 귀했습니다. 다만 그 대부분은 대형 평형, 100억을 훌쩍 넘는 초고가였습니다.
+          한강을 품으려면 너무 큰 집과 너무 큰 금액을 함께 떠안아야 했습니다.</p>
+        <p class="lede" style="margin-top:1.4em">카일룸 밤섬은 그 공식을 바꿉니다.
+          한강을 영구히 조망하는, <strong style="color:var(--ink);font-weight:700">제대로 된 한 채.</strong>
+          큰 평수보다 한 채의 격(格)을 원하던 분들에게, 지금 이 자리는 흔치 않은 답이 됩니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 03 OVERVIEW -->
+<section class="sec band-cream" id="overview">
+  <div class="wrap">
+    <div class="ov-head reveal">
+      <div class="eyebrow">Only 28 Residences</div>
+      <h2 class="sec-title">단 28세대를 위한, 프라이빗 단지</h2>
+      <p class="lede">한 층을 온전히 누리거나, 단 두 세대만이 공유하는 밀도.<br>희소함은 설계에서 시작됩니다.</p>
+    </div>
+    <div class="stats reveal">
+      <div class="stat"><div class="k">Scale</div><div class="v">지하 3층 · 지상 18층</div></div>
+      <div class="stat"><div class="k">Residences</div><div class="v">단 28세대 <small>A 17 · B 11</small></div></div>
+      <div class="stat"><div class="k">Parking</div><div class="v">세대당 2.46대 <small>총 69대</small></div></div>
+      <div class="stat"><div class="k">전용률</div><div class="v">83.9%</div></div>
+      <div class="stat"><div class="k">Location</div><div class="v">마포구 신정동 66-2 <small>한강 영구조망</small></div></div>
+      <div class="stat"><div class="k">Certified</div><div class="v">제로에너지 5등급 <small>녹색건축 우수</small></div></div>
+      <div class="stat"><div class="k">Floor Area</div><div class="v">6,900.38㎡ <small>2,087.36평</small></div></div>
+      <div class="stat"><div class="k">용적률 · 건폐율</div><div class="v">298.72% · 34.94%</div></div>
+      <div class="stat"><div class="k">Zoning</div><div class="v">제3종 일반주거 <small>중점경관지구</small></div></div>
+    </div>
+    <div class="gal reveal" data-gal>
+      <div class="frame"><div class="mslide" id="g0s0"><img class="on" src="./images/caelum/gal-a-01.jpg" data-cap-n="Exterior · Day" data-cap-t="한강을 등진 18층 석조 타워" alt="카일룸 밤섬 외관 주간"><a class="marr l" href="#g0s3" aria-label="이전">&#8249;</a><a class="marr r" href="#g0s1" aria-label="다음">&#8250;</a></div><div class="mslide" id="g0s1"><img src="./images/caelum/gal-a-02.jpg" data-cap-n="Exterior · Night" data-cap-t="강변북로를 따라 빛나는 야경" alt="카일룸 밤섬 외관 야경"><a class="marr l" href="#g0s0" aria-label="이전">&#8249;</a><a class="marr r" href="#g0s2" aria-label="다음">&#8250;</a></div><div class="mslide" id="g0s2"><img src="./images/caelum/gal-a-03.jpg" data-cap-n="Porte-cochère" data-cap-t="차량이 머무는 프라이빗 진입동선" alt="카일룸 밤섬 입구"><a class="marr l" href="#g0s1" aria-label="이전">&#8249;</a><a class="marr r" href="#g0s3" aria-label="다음">&#8250;</a></div><div class="mslide" id="g0s3"><img src="./images/caelum/gal-a-04.jpg" data-cap-n="Facade" data-cap-t="석재의 결을 살린 입면 디테일" alt="카일룸 밤섬 파사드"><a class="marr l" href="#g0s2" aria-label="이전">&#8249;</a><a class="marr r" href="#g0s0" aria-label="다음">&#8250;</a></div></div>
+      <div class="grad"></div>
+      <div class="cap"><div class="n"></div><div class="t"></div></div>
+      <button class="nav prev" aria-label="이전">&#8249;</button>
+      <button class="nav next" aria-label="다음">&#8250;</button>
+      <div class="dots"></div>
+    </div>
+  </div>
+</section>
+
+<!-- 04 RESIDENCE -->
+<section class="sec" id="residence">
+  <div class="wrap">
+    <div class="ov-head reveal">
+      <div class="eyebrow">A &amp; B Residence</div>
+      <h2 class="sec-title">삶의 격을 담은, 두 개의 평면</h2>
+      <p class="lede">한강을 향해 열린 거실과 마스터룸,<br>그리고 일상에 품격을 더하는 드레스룸과 주방.</p>
+    </div>
+    <div class="types reveal">
+      <!-- A TYPE -->
+      <div class="tcard" data-gal data-auto="5200">
+        <div class="tg">
+          <span class="badge">A TYPE</span>
+          <img class="on" src="./images/caelum/unit-a-main.jpg" alt="A타입 거실">
+          <img src="./images/caelum/unit-a-living.jpg" alt="A타입 드레스룸">
+          <img src="./images/caelum/unit-a-dress.jpg" alt="A타입 욕실">
+          <img src="./images/caelum/unit-a-bath.jpg" alt="A타입 무드">
+        </div>
+        <div class="tbody">
+          <h3>A 타입</h3>
+          <div class="floors">17세대 · 2–18F</div>
+          <ul class="spec">
+            <li><span>전용면적</span><span>113.83㎡</span></li>
+            <li><span>공급면적</span><span>135.70㎡</span></li>
+            <li><span>서비스면적</span><span>28.69㎡</span></li>
+            <li><span>전용률</span><span>83.9%</span></li>
+          </ul>
+        </div>
+      </div>
+      <!-- B TYPE -->
+      <div class="tcard" data-gal data-auto="5800">
+        <div class="tg">
+          <span class="badge">B TYPE</span>
+          <img class="on" src="./images/caelum/unit-b-main.jpg" alt="B타입 마스터룸">
+          <img src="./images/caelum/unit-b-master.jpg" alt="B타입 주방">
+          <img src="./images/caelum/unit-b-kitchen.jpg" alt="B타입 무드">
+          <img src="./images/caelum/unit-b-mood.jpg" alt="B타입 무드2">
+        </div>
+        <div class="tbody">
+          <h3>B 타입</h3>
+          <div class="floors">11세대 · 2–12F</div>
+          <ul class="spec">
+            <li><span>전용면적</span><span>127.35㎡</span></li>
+            <li><span>공급면적</span><span>151.83㎡</span></li>
+            <li class="hi"><span>서비스면적</span><span>52.70㎡</span></li>
+            <li><span>전용률</span><span>83.9%</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <p class="tnote reveal">두 타입 모두 전용률 83.9%의 알찬 설계 — 특히 B타입은 <strong style="color:var(--sangji)">52.70㎡</strong>에 이르는 넓은 서비스 면적으로 실사용 공간을 한층 여유롭게 누립니다. <span style="opacity:.7">(면적은 모두 예정)</span></p>
+  </div>
+</section>
+
+<!-- 05 VIEW -->
+<section class="sec band-ink" id="view">
+  <div class="wrap">
+    <div class="view-head reveal">
+      <div class="eyebrow">The Last Riverfront</div>
+      <h2 class="sec-title">창이 곧, 작품이 되는 집</h2>
+      <p class="lede">아침의 윤슬부터 밤섬의 불꽃까지 —<br>카일룸의 모든 창은 한강을 향해 열립니다.</p>
+    </div>
+    <div class="gal reveal" data-gal data-auto="5000">
+      <div class="frame"><div class="mslide" id="g1s0"><img class="on" src="./images/caelum/gal-b-01.jpg" data-cap-n="Living View · Dusk" data-cap-t="거실에서 바라본 한강의 해질녘" alt="한강 조망 해질녘"><a class="marr l" href="#g1s4" aria-label="이전">&#8249;</a><a class="marr r" href="#g1s1" aria-label="다음">&#8250;</a></div><div class="mslide" id="g1s1"><img src="./images/caelum/gal-b-02.jpg" data-cap-n="Riverside Fireworks" data-cap-t="세대에서 즐기는 한강 불꽃축제" alt="한강 불꽃놀이 조망"><a class="marr l" href="#g1s0" aria-label="이전">&#8249;</a><a class="marr r" href="#g1s2" aria-label="다음">&#8250;</a></div><div class="mslide" id="g1s2"><img src="./images/caelum/gal-b-03.jpg" data-cap-n="Bamseom · Day" data-cap-t="밤섬과 마주한 영구 수(水)조망" alt="밤섬 주간 조망"><a class="marr l" href="#g1s1" aria-label="이전">&#8249;</a><a class="marr r" href="#g1s3" aria-label="다음">&#8250;</a></div><div class="mslide" id="g1s3"><img src="./images/caelum/gal-b-04.jpg" data-cap-n="Bamseom · Night" data-cap-t="도심과 강이 함께 빛나는 야경" alt="밤섬 야경 조망"><a class="marr l" href="#g1s2" aria-label="이전">&#8249;</a><a class="marr r" href="#g1s4" aria-label="다음">&#8250;</a></div><div class="mslide" id="g1s4"><img src="./images/caelum/gal-b-05.jpg" data-cap-n="Aerial" data-cap-t="여의도·밤섬을 품은 입지 조망" alt="여의도 밤섬 조감"><a class="marr l" href="#g1s3" aria-label="이전">&#8249;</a><a class="marr r" href="#g1s0" aria-label="다음">&#8250;</a></div></div>
+      <div class="grad"></div>
+      <div class="cap"><div class="n"></div><div class="t"></div></div>
+      <button class="nav prev" aria-label="이전">&#8249;</button>
+      <button class="nav next" aria-label="다음">&#8250;</button>
+      <div class="dots"></div>
+    </div>
+    <div class="view-video reveal">
+      <video autoplay muted loop playsinline preload="auto" poster="./images/caelum/band-poster.jpg">
+        <source src="./images/caelum/band-loop.mp4" type="video/mp4">
+      </video>
+      <div class="vv-cap"><span>Riverside Fireworks</span> 한강을 마주한 거실에서, 일 년에 몇 번뿐인 풍경마저 일상이 됩니다</div>
+    </div>
+  </div>
+</section>
+<!-- BUILDER / SANGJI -->
+<section class="sec" id="builder">
+  <div class="wrap">
+    <div class="sangji">
+      <div class="sangji-txt reveal">
+        <div class="sangji-logo"><svg width="220" height="92" viewBox="0 0 220 92" fill="none" xmlns="http://www.w3.org/2000/svg">
+<defs><linearGradient id="sgj" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0" stop-color="#7A5630"/><stop offset="1" stop-color="#4E371F"/></linearGradient></defs>
+<g transform="translate(78,2)">
+<path d="M6 18 L32 5 L58 18 Z" fill="url(#sgj)"/>
+<rect x="11" y="20" width="6" height="22" fill="url(#sgj)"/>
+<rect x="22" y="20" width="6" height="22" fill="url(#sgj)"/>
+<rect x="36" y="20" width="6" height="22" fill="url(#sgj)"/>
+<rect x="47" y="20" width="6" height="22" fill="url(#sgj)"/>
+<rect x="5" y="44" width="54" height="3.4" fill="url(#sgj)"/>
+</g>
+<text x="110" y="72" text-anchor="middle" font-family="Cormorant Garamond, serif" font-weight="600"
+  font-size="30" letter-spacing="5" fill="#5A4023">SANGJI</text>
+<text x="110" y="88" text-anchor="middle" font-family="Pretendard, sans-serif" font-weight="500"
+  font-size="9" letter-spacing="6" fill="#8A6A45">CONSTRUCTION</text>
+</svg></div>
+        <div class="eyebrow">Since 2002 · Caelum</div>
+        <h2 class="sec-title">못 만드는 것을,<br>만들어 온 사람들</h2>
+        <p class="lede"><strong style="color:var(--ink)">카일룸(CAELUM)</strong>은 상지건설의 하이엔드 주거 브랜드입니다.
+          1998년 <strong style="color:var(--ink)">리츠빌</strong>, 2002년 <strong style="color:var(--ink)">카일룸</strong>으로
+          청담 · 삼성 · 도곡 · 반포 등 강남 최상위 주거를 27년간 지어 왔습니다.
+          강남을 넘어 한강변으로 — 카일룸 밤섬은 그 첫 진출입니다.</p>
+        <div class="heri">
+          <div class="h"><div class="n">RITZVIL</div><div class="d">고급빌라 · 1998</div></div>
+          <div class="h"><div class="n">CAELUM</div><div class="d">프리미엄 주택 · 2002</div></div>
+          <div class="h"><div class="n">CAELUS</div><div class="d">프리미엄 아파트</div></div>
+        </div>
+        <div class="roles">
+          <div class="r"><div class="k">시행</div><div class="v">상지건설(주)<br>하이클래스디벨롭(주)</div></div>
+          <div class="r"><div class="k">시공</div><div class="v">상지건설(주)</div></div>
+        </div>
+      </div>
+      <div class="sangji-img reveal"><img src="./images/caelum/sangji.jpg" alt="상지건설 카일룸 입면"></div>
+    </div>
+  </div>
+</section>
+
+<!-- LOCATION -->
+<section class="sec band-cream" id="location">
+  <div class="wrap">
+    <div class="loc-head reveal">
+      <div class="eyebrow">Location</div>
+      <h2 class="sec-title">오시는 길</h2>
+    </div>
+    <div class="maps reveal">
+      <div class="mcard">
+        <div class="mbox"><svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg" fill="none">
+<g stroke="#231D17" stroke-width="1.4" opacity="0.45">
+<line x1="40" y1="95" x2="360" y2="95"/>
+<line x1="40" y1="205" x2="360" y2="205"/>
+<line x1="130" y1="40" x2="130" y2="270"/>
+<line x1="270" y1="40" x2="270" y2="270"/>
+</g>
+<circle cx="130" cy="95" r="4.5" fill="#231D17"/>
+<circle cx="270" cy="205" r="4.5" fill="#231D17"/>
+<text x="118" y="84" font-family="Pretendard" font-size="11" fill="#5A4F44">청담역</text>
+<text x="282" y="200" font-family="Pretendard" font-size="11" fill="#5A4F44">청담사거리</text>
+<text x="48" y="88" font-family="Pretendard" font-size="11" fill="#5A4F44">압구정로데오역</text>
+<g transform="translate(200,150)">
+<path d="M0 -14 C8 -14 14 -8 14 0 C14 9 0 20 0 20 C0 20 -14 9 -14 0 C-14 -8 -8 -14 0 -14Z" fill="#6B4A2C"/>
+<circle cx="0" cy="-1" r="4.5" fill="#F4EFE7"/>
+</g>
+<text x="200" y="200" text-anchor="middle" font-family="Cormorant Garamond,serif" font-size="13"
+  letter-spacing="2" font-weight="600" fill="#6B4A2C">CAELUM GALLERY</text>
+</svg></div>
+        <h4>VIP 상담 갤러리</h4>
+        <div class="addr">서울시 강남구 청담동 93-5</div>
+        <div class="sub">방문 상담은 사전 예약제로 운영됩니다 · 1555-1087</div>
+      </div>
+      <div class="mcard">
+        <div class="mbox"><svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg" fill="none">
+<path d="M0 150 C90 130 150 175 230 165 C300 156 350 175 400 168 L400 300 L0 300 Z" fill="#C7D4D8" opacity="0.5"/>
+<path d="M0 150 C90 130 150 175 230 165 C300 156 350 175 400 168" stroke="#8AA3AB" stroke-width="1.4" fill="none"/>
+<ellipse cx="250" cy="205" rx="46" ry="20" fill="#B9C7A8" opacity="0.7"/>
+<text x="250" y="209" text-anchor="middle" font-family="Pretendard" font-size="10" fill="#4d5a3a">밤섬</text>
+<g stroke="#231D17" stroke-width="1.3" opacity="0.4">
+<line x1="120" y1="120" x2="150" y2="240"/>
+<line x1="300" y1="120" x2="330" y2="240"/>
+<path d="M20 175 C120 160 260 150 390 160" stroke-width="2" opacity="0.55"/>
+</g>
+<text x="118" y="112" font-family="Pretendard" font-size="10" fill="#5A4F44">서강대교</text>
+<text x="300" y="112" font-family="Pretendard" font-size="10" fill="#5A4F44">마포대교</text>
+<text x="30" y="168" font-family="Pretendard" font-size="9" fill="#7d736a">강변북로 / 올림픽대로</text>
+<text x="350" y="118" text-anchor="end" font-family="Pretendard" font-size="10" fill="#5A4F44">여의도</text>
+<g transform="translate(180,95)">
+<path d="M0 -15 C9 -15 15 -9 15 0 C15 10 0 22 0 22 C0 22 -15 10 -15 0 C-15 -9 -9 -15 0 -15Z" fill="#6B4A2C"/>
+<circle cx="0" cy="-1" r="5" fill="#F4EFE7"/>
+</g>
+<text x="180" y="58" text-anchor="middle" font-family="Cormorant Garamond,serif" font-size="13"
+  letter-spacing="2" font-weight="600" fill="#6B4A2C">CAELUM BAMSEOM</text>
+<text x="180" y="74" text-anchor="middle" font-family="Pretendard" font-size="9.5" fill="#5A4F44">신정동 66-2</text>
+</svg></div>
+        <h4>현장</h4>
+        <div class="addr">서울시 마포구 신정동 66-2</div>
+        <div class="sub">한강 · 밤섬 영구조망 · 강변북로/올림픽대로 인접</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CLOSING CTA -->
+<section class="cta-band">
+  <div class="bg" style="background-image:url('./images/caelum/cta-bg.jpg')"></div>
+  <div class="in">
+    <div class="q">집은 결국,<br>안목입니다</div>
+    <p class="qs">흔한 것은 또 만들 수 있어도, 못 만드는 것은 끝내 귀해집니다.<br>
+      카일룸 밤섬의 세부 일정과 상담 가능 여부를 안내해 드립니다.</p>
+    <div class="row">
+      <label class="b1" for="m-reg">관심고객 등록</label>
+      <a class="b2" href="tel:15551087">문의 1555 · 1087</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="foot">
+  <div class="wrap">
+    <div class="top">
+      <div class="fbrand">
+        <div class="em"><svg width="50" height="38" viewBox="0 0 60 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M8 16 L30 5 L52 16 Z" fill="#4A3320"/>
+<rect x="13" y="18" width="5" height="20" fill="#4A3320"/>
+<rect x="22" y="18" width="5" height="20" fill="#4A3320"/>
+<rect x="33" y="18" width="5" height="20" fill="#4A3320"/>
+<rect x="42" y="18" width="5" height="20" fill="#4A3320"/>
+<rect x="8" y="40" width="44" height="3" fill="#4A3320"/></svg></div>
+        <div class="nm">CAELUM<small>BAMSEOM</small></div>
+      </div>
+      <div class="fcol">
+        <div class="lab">Contact</div>
+        <div class="ftel">1555-1087</div>
+        <div class="roles2">
+          <div><div class="lab" style="margin-top:14px">시행</div>상지건설(주) · 하이클래스디벨롭(주)</div>
+          <div><div class="lab" style="margin-top:14px">시공</div>상지건설(주)</div>
+        </div>
+      </div>
+    </div>
+    <div class="sig">집은 결국, 안목입니다.</div>
+    <div class="disc">
+      ※ 본 홈페이지에 기재된 층수 · 세대수 · 면적 · 주차대수 · 인증 등은 모두 예정 사항이며,
+      인허가 및 사업 진행 과정에서 변경될 수 있습니다. 분양가 등 세부 조건은 유선 상담을 통해 안내해 드립니다.
+      본 페이지의 이미지(CG)와 조감도 · 지역도는 소비자의 이해를 돕기 위해 제작된 것으로 실제와 다를 수 있습니다.
+    </div>
+    <div class="copy">© CAELUM BAMSEOM · SANGJI CONSTRUCTION</div>
+  </div>
+</footer>
+
+<!-- MODAL -->
+<div class="modal" id="modal">
+  <div class="sheet">
+    <label class="x" for="m-reg" aria-label="닫기">&times;</label>
+    <div id="formwrap">
+      <div class="mh">
+        <div class="eyebrow">Register</div>
+        <h3>관심고객 등록</h3>
+        <p class="ms">성함 · 연락처와 방문 희망일시를 남겨주시면, 전담 상담사가 안내해 드립니다.</p>
+      </div>
+            <form id="regform">
+        <div class="f2">
+          <div class="field"><label>성명<span class="req">*</span></label>
+            <input type="text" name="name" placeholder="성함" required></div>
+          <div class="field"><label>연락처<span class="req">*</span></label>
+            <input type="tel" name="tel" placeholder="010-0000-0000" required></div>
+        </div>
+        <div class="field"><label>방문 희망일<span class="req">*</span></label>
+          <input type="date" name="vdate" id="vdate" required></div>
+        <div class="field"><label>방문 희망시간<span class="req">*</span></label>
+          <div class="timegrid" id="timegrid"></div>
+          <input type="hidden" name="vtime" id="vtime"></div>
+        <div class="agree">
+          <div class="at">[필수] 개인정보 수집 및 이용 동의</div>
+          <div class="ad">· 수집주체 : 상지건설(주) · 하이클래스디벨롭(주)<br>
+            · 수집목적 : 분양 정보 안내 및 방문 상담 (전화 · 문자)<br>
+            · 수집항목 : 성명, 연락처, 방문 희망일시<br>
+            · 보유기간 : 카일룸 밤섬 분양 완료 시까지</div>
+          <div class="ar">
+            <label><input type="radio" name="agree1" value="y" required> 동의합니다</label>
+            <label><input type="radio" name="agree1" value="n"> 동의하지 않습니다</label>
+          </div>
+        </div>
+        <button class="submit" type="submit">관심고객 등록하기</button>
+        <div class="formerr" id="formerr"></div>
+      </form>
+    </div>
+    <div class="done" id="done">
+      <div class="ic">&#10003;</div>
+      <h3>등록이 접수되었습니다</h3>
+      <p>카일룸 밤섬의 소식을 가장 먼저 안내해 드리겠습니다.<br>빠른 상담을 원하시면 아래로 연락 주세요.</p>
+      <div class="tel2">1555-1087</div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+function ready(fn){if(document.readyState!=='loading')fn();else document.addEventListener('DOMContentLoaded',fn);}
+function $(id){return document.getElementById(id);}
+ready(function(){
+  try{var hdr=$('hdr');if(hdr)addEventListener('scroll',function(){hdr.classList.toggle('solid',scrollY>window.innerHeight*0.7);},{passive:true});}catch(e){}
+  // nav overlay
+  try{
+    var navov=$('navov');
+    function closeNav(){if(navov){navov.classList.remove('open');document.body.style.overflow='';}}
+    window.__closeNav=closeNav;
+    var bg=$('burger');if(bg)bg.addEventListener('click',function(){if(navov){navov.classList.add('open');document.body.style.overflow='hidden';}});
+    var nc=$('navclose');if(nc)nc.addEventListener('click',closeNav);
+    document.querySelectorAll('[data-nav]').forEach(function(a){a.addEventListener('click',function(){setTimeout(closeNav,120);});});
+  }catch(e){}
+  // hero crossfade
+  try{var s=document.querySelectorAll('#herobg .slide'),hi=0;if(s.length>=2)setInterval(function(){s[hi].classList.remove('on');hi=(hi+1)%s.length;s[hi].classList.add('on');},6500);}catch(e){}
+  // reveal (fallback: show all if observer unavailable)
+  try{
+    if('IntersectionObserver' in window){
+      var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:0,rootMargin:'0px 0px -8% 0px'});
+      document.querySelectorAll('.reveal').forEach(function(el){io.observe(el);});
+    }else{document.querySelectorAll('.reveal').forEach(function(el){el.classList.add('in');});}
+  }catch(e){document.querySelectorAll('.reveal').forEach(function(el){el.classList.add('in');});}
+  // galleries — buttons, dots, AND touch swipe
+  try{
+    document.querySelectorAll('[data-gal]').forEach(function(g){
+      var imgs=g.querySelectorAll('.frame img, .tg img'),i=0,n=imgs.length;if(!n)return;
+      var cap=g.querySelector('.cap'),dotsBox=g.querySelector('.dots');
+      var auto=parseInt(g.getAttribute('data-auto')||'4600');
+      function setCap(){if(!cap)return;var im=imgs[i],nn=cap.querySelector('.n'),tt=cap.querySelector('.t');if(nn)nn.textContent=im.getAttribute('data-cap-n')||'';if(tt)tt.textContent=im.getAttribute('data-cap-t')||'';}
+      if(dotsBox){for(var d=0;d<n;d++){var b=document.createElement('i');if(d===0)b.className='on';(function(idx){b.addEventListener('click',function(){go(idx);reset();});})(d);dotsBox.appendChild(b);}}
+      var dots=dotsBox?dotsBox.querySelectorAll('i'):[];
+      function go(t){imgs[i].classList.remove('on');if(dots[i])dots[i].classList.remove('on');i=(t+n)%n;imgs[i].classList.add('on');if(dots[i])dots[i].classList.add('on');setCap();}
+      var timer;function reset(){clearInterval(timer);timer=setInterval(function(){go(i+1);},auto);}
+      var pv=g.querySelector('.prev'),nx=g.querySelector('.next');
+      if(pv)pv.addEventListener('click',function(){go(i-1);reset();});
+      if(nx)nx.addEventListener('click',function(){go(i+1);reset();});
+      var x0=null;
+      g.addEventListener('touchstart',function(e){x0=e.touches[0].clientX;},{passive:true});
+      g.addEventListener('touchend',function(e){if(x0===null)return;var dx=e.changedTouches[0].clientX-x0;if(Math.abs(dx)>40){go(dx<0?i+1:i-1);reset();}x0=null;},{passive:true});
+      setCap();reset();
+    });
+  }catch(e){}
+  // modal (관심고객 등록)
+  try{
+    var modal=$('modal'),fw=$('formwrap'),dn=$('done');
+    function openReg(){if(modal){modal.classList.add('open');document.body.style.overflow='hidden';}}
+    function closeReg(){if(modal){modal.classList.remove('open');document.body.style.overflow='';}}
+    document.querySelectorAll('[data-reg]').forEach(function(b){b.addEventListener('click',openReg);});
+    var mx=$('mx');if(mx)mx.addEventListener('click',closeReg);
+    if(modal)modal.addEventListener('click',function(e){if(e.target===modal)closeReg();});
+    // Supabase 클라이언트
+    var SB=null;try{if(window.supabase)SB=window.supabase.createClient('https://tctilpuhknxucrlnhlky.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRjdGlscHVoa254dWNybG5obGt5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYxMzE3NjQsImV4cCI6MjA5MTcwNzc2NH0._mS10zf3ayR7nbdFxQJHfZS57_tzOakGm-WkyQB8bxU');}catch(e){}
+    // 방문 희망일 최소값 = 오늘
+    try{var vd=$('vdate');if(vd){var t=new Date();var mm=String(t.getMonth()+1).padStart(2,'0');var dd=String(t.getDate()).padStart(2,'0');vd.min=t.getFullYear()+'-'+mm+'-'+dd;}}catch(e){}
+    // 방문 희망시간 버튼 그리드 (10:00~16:30, 30분 14개)
+    try{var tg=$('timegrid'),vt=$('vtime');if(tg){['10:00','10:30','11:00','11:30','12:00','12:30','13:00','13:30','14:00','14:30','15:00','15:30','16:00','16:30'].forEach(function(s){var b=document.createElement('button');b.type='button';b.textContent=s;b.addEventListener('click',function(){tg.querySelectorAll('button').forEach(function(x){x.classList.remove('on');});b.classList.add('on');if(vt)vt.value=s;});tg.appendChild(b);});}}catch(e){}
+    // 제출 → Supabase consultations 저장
+    var rf=$('regform');
+    if(rf)rf.addEventListener('submit',function(e){
+      e.preventDefault();
+      var err=$('formerr');function fail(m){if(err)err.textContent=m;}
+      if(err)err.textContent='';
+      var nm=(rf.querySelector('[name=name]').value||'').trim();
+      var ph=(rf.querySelector('[name=tel]').value||'').trim();
+      var dv=(rf.querySelector('[name=vdate]').value||'').trim();
+      var tv=(rf.querySelector('[name=vtime]').value||'').trim();
+      var ag=rf.querySelector('input[name=agree1]:checked');
+      if(!nm)return fail('성함을 입력해 주세요.');
+      if(!ph)return fail('연락처를 입력해 주세요.');
+      if(!dv)return fail('방문 희망일을 선택해 주세요.');
+      if(!tv)return fail('방문 희망시간을 선택해 주세요.');
+      if(!ag||ag.value!=='y')return fail('개인정보 수집·이용에 동의해 주셔야 등록이 가능합니다.');
+      var btn=rf.querySelector('.submit');if(btn){btn.disabled=true;btn.textContent='등록 중…';}
+      function ok(){if(fw)fw.style.display='none';if(dn)dn.classList.add('show');}
+      function reset(){if(btn){btn.disabled=false;btn.textContent='관심고객 등록하기';}}
+      var payload={name:nm,phone:ph,source:'카일룸밤섬',message:'[희망방문: '+dv+' '+tv+']'};
+      if(!SB){reset();return fail('일시적인 연결 오류입니다. 잠시 후 다시 시도하시거나 1555-1087로 문의해 주세요.');}
+      SB.from('consultations').insert(payload).then(function(res){
+        if(res&&res.error){reset();return fail('전송 중 오류가 발생했습니다. 잠시 후 다시 시도하시거나 1555-1087로 문의해 주세요.');}
+        ok();
+      }).catch(function(){reset();fail('전송 중 오류가 발생했습니다. 1555-1087로 문의해 주세요.');});
+    });
+    addEventListener('keydown',function(e){if(e.key==='Escape'){closeReg();if(window.__closeNav)window.__closeNav();}});
+  }catch(e){}
+});
+})();
+</script>
+</body>
+</html>
